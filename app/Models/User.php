@@ -21,10 +21,12 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'password',
         'google_id',
         'avatar',
         'google_token',
         'google_refresh_token',
+        'google_linked_at',
     ];
 
     /**
@@ -49,6 +51,7 @@ class User extends Authenticatable
         'password' => 'hashed',
         'google_token' => 'encrypted:array', // Automatically encrypt/decrypt tokens
         'google_refresh_token' => 'encrypted',
+        'google_linked_at' => 'datetime',
     ];
 
     /**
@@ -58,7 +61,7 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
-        
+
     /**
      * Get the attributes that should be cast.
      *

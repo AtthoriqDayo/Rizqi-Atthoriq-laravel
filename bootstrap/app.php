@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //
         $middleware->alias([
             'is_admin' => \App\Http\Middleware\IsAdminMiddleware::class,
+            'google.linked' => \App\Http\Middleware\EnsureGoogleAccountIsLinked::class,
             ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
