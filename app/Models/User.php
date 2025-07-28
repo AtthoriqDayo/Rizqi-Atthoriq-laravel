@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -20,7 +21,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
+        'google_id',
+        'avatar',
+        'google_token',
+        'google_refresh_token',
     ];
 
     /**
@@ -31,8 +35,30 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'google_token', // Hide tokens from JSON responses
+        'google_refresh_token',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'google_token' => 'encrypted:array', // Automatically encrypt/decrypt tokens
+        'google_refresh_token' => 'encrypted',
+    ];
+
+    /**
+     * Check if the user is an admin.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+        
     /**
      * Get the attributes that should be cast.
      *
