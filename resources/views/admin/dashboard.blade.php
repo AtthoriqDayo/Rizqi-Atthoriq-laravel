@@ -1,43 +1,40 @@
-@extends('layouts.app')
+<x-app-layout>
+    <div class="py-12">
+        <h2 class="font-semibold text-xl leading-tight text-center">
+            {{ __('Admin Dashboard - Manage Users') }}
+        </h2>
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-black/20 backdrop-blur-lg overflow-hidden shadow-sm sm:rounded-lg border-2 border-white/70">
+                <div class="p-6">
 
-@section('content')
-<div class="p-8 text-gray-800">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">Admin Dashboard - Manage Users</h1>
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Logout</button>
-        </form>
-    </div>
+                    <table class="w-full text-left text-gray-200">
+                        <thead>
+                            <tr class="border-b border-white/20">
+                                <th class="p-4">Name</th>
+                                <th class="p-4">Email</th>
+                                <th class="p-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($users as $user)
+                                <tr class="border-b border-white/10 hover:bg-white/10">
+                                    <td class="p-4">{{ $user->name }}</td>
+                                    <td class="p-4">{{ $user->email }}</td>
+                                    <td class="p-4">
+                                        <a href="{{ route('admin.users.edit', $user) }}" class="text-sky-300 hover:text-sky-200">Edit</a>
+                                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline ml-4" onsubmit="return confirm('Are you sure you want to deactivate this user?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-400 hover:text-red-300">Deactivate</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
 
-    <div class="bg-white/50 backdrop-blur-sm p-6 rounded-lg shadow-lg">
-        <table class="w-full text-left">
-            <thead>
-                <tr class="border-b">
-                    <th class="p-4">ID</th>
-                    <th class="p-4">Name</th>
-                    <th class="p-4">Email</th>
-                    <th class="p-4">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($users as $user)
-                    <tr class="border-b hover:bg-white/20">
-                        <td class="p-4">{{ $user->id }}</td>
-                        <td class="p-4">{{ $user->name }}</td>
-                        <td class="p-4">{{ $user->email }}</td>
-                        <td class="p-4">
-                            <a href="{{ route('admin.users.edit', $user) }}" class="text-blue-600 hover:underline">Edit</a>
-                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline ml-4" onsubmit="return confirm('Are you sure you want to deactivate this user?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:underline">Deactivate</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-@endsection
+</x-app-layout>

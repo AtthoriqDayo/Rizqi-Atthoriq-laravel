@@ -6,7 +6,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Note;
+use App\Models\Todo;
 
 class User extends Authenticatable
 {
@@ -73,5 +75,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Mendefinisikan relasi bahwa satu User memiliki banyak Note.
+     */
+    public function notes(): HasMany
+    {
+        return $this->hasMany(Note::class);
+    }
+
+    /**
+     * Mendefinisikan relasi bahwa satu User memiliki banyak To-do.
+     */
+    public function todos(): HasMany
+    {
+        return $this->hasMany(Todo::class);
     }
 }

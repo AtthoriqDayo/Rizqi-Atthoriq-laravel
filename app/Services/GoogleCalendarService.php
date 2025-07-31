@@ -70,4 +70,51 @@ class GoogleCalendarService
         return $service->events->insert('primary', $event);
     }
     */
+
+
+    /**
+     * Create a new event in the user's primary calendar.
+     */
+    public function createEvent($summary, \DateTime $startTime, \DateTime $endTime)
+    {
+        $service = $this->getService();
+        $event = new \Google\Service\Calendar\Event([
+            'summary' => $summary,
+            'start' => ['dateTime' => $startTime->format(\DateTime::RFC3339)],
+            'end' => ['dateTime' => $endTime->format(\DateTime::RFC3339)],
+        ]);
+
+        return $service->events->insert('primary', $event);
+    }
+
+    /**
+     * Delete an event from the user's primary calendar.
+     */
+    public function deleteEvent(string $eventId)
+    {
+        $service = $this->getService();
+        // Return value is empty on success, so we don't need to return it
+        $service->events->delete('primary', $eventId);
+    }
+
+        public function updateEvent(string $eventId, string $summary, \DateTime $startTime, \DateTime $endTime)
+    {
+        $service = $this->getService();
+        $event = $service->events->get('primary', $eventId);
+
+        $event->setSummary($summary);
+        $event->getStart()->setDateTime($startTime->format(\DateTime::RFC3339));
+        $event->getEnd()->setDateTime($endTime->format(\DateTime::RFC3339));
+
+        return $service->events->update('primary', $eventId, $event);
+    }
+
+    // Tambahkan juga method ini untuk hanya mengubah judulnya
+    public function updateEventSummary(string $eventId, string $summary)
+    {
+        $service = $this->getService();
+        $event = $service->events->get('primary', $eventId);
+        $event->setSummary($summary);
+        return $service->events->update('primary', $eventId, $event);
+    }
 }
